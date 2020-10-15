@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import Orphanage from "../models/Orphanage";
-import Image from "../models/Image";
 
 export default {
     async index(request: Request, response: Response){
         const orphanageRepository = getRepository(Orphanage);
-        
         
         const orphanages = await orphanageRepository.find();
 
@@ -41,6 +39,7 @@ export default {
             return { path : image.filename }
         })
 
+        console.log(images);
     
         const orphanage = orphanageRepository.create({
             name, 
@@ -54,15 +53,6 @@ export default {
         })
     
         await orphanageRepository.save(orphanage);
-
-        const imageRepository = getRepository(Image);
-        images.map(img => {
-            const image = imageRepository.create({
-                path: img.path,
-                orphanage_id: orphanage.id
-            })
-            imageRepository.save(image);
-        })
     
         return response.status(201).json(orphanage)
     }

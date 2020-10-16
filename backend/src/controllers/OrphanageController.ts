@@ -31,6 +31,8 @@ export default {
     },
 
     async create(request: Request, response: Response){
+        console.log('bateu aqui');
+
         const { 
             name, 
             latitude, 
@@ -58,7 +60,7 @@ export default {
             about,
             instructions,
             opening_hours,
-            open_on_weekends,
+            open_on_weekends: open_on_weekends === 'true' ? true: false,
             images
         }
 
@@ -75,10 +77,12 @@ export default {
             })),
         })
 
+
         await schema.validate(data, {
             abortEarly: false,
         })
 
+        // const orphanage = orphanageRepository.create(data)
         const orphanage = orphanageRepository.create(data)
     
         await orphanageRepository.save(orphanage);
